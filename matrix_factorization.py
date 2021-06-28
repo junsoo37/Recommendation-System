@@ -5,6 +5,13 @@ from sklearn.metrics import mean_squared_error
 
 class MatrixFactorizeRecommendation:
     def __init__(self, movies, ratings, userId, top_n):
+        """ This algorithm is based on matrix factorization with SGD method. It returns top n recommended items for
+        input user.
+        :param movies: movie-lens latest small movie datasets
+        :param ratings: movie-lens latest small ratings datasets
+        :param userId: input userId
+        :param top_n: get n recommended items
+        """
         self.movies = movies
         self.ratings = ratings[['userId', 'movieId', 'rating']]
         self.userId = userId
@@ -25,8 +32,13 @@ class MatrixFactorizeRecommendation:
         return rmse
 
     def matrix_factorization(self, steps=100, num_factors=50, learning_rate=0.01, reg_lambda=0.01):
-        # movielens 데이터셋은 유저가 평가하지 않은 content가 매우 많기에 심한 Sparse Matrix이다.
-        # 따라서, matrix factorization에사 SVD를 사용하지 않고, SGD를 사용하겠다.
+        """ Movie Lens datasets is very sparse. Therefore use updating algorithm SGD instead of SVD.
+        :param steps: steps for SGD
+        :param num_factors: dimension of latent factors
+        :param learning_rate:
+        :param reg_lambda:
+        :return:
+        """
         num_users, num_movies = self.ratings_matrix.values.shape
         np.random.seed(1)
         P = np.random.normal(scale=float(1)/num_factors, size=(num_users, num_factors))
