@@ -6,11 +6,19 @@ from sklearn.metrics import mean_squared_error
 
 class NearestNeighborRecommendation:
     def __init__(self, movies, ratings, top_n):
+        """ This algorithm is based on KNN systems. It will return top n recommended items for input items.
+        :param movies: movie-lens latest small movie datasets
+        :param ratings: movie-lens latest small ratings datasets
+        :param top_n: Get n recommended items
+        """
         self.movies = movies
         self.ratings = ratings
         self.top_n = top_n
 
     def preprocessing(self):
+        """ Create ratings_matrix dataframe. Fill 0 for user's nan rating data
+        :return:
+        """
         self.ratings = self.ratings[['userId', 'movieId', 'rating']]
         rating_movies = pd.merge(self.ratings, self.movies, on='movieId')
         self.ratings_matrix = rating_movies.pivot_table('rating', index='userId', columns='title')
@@ -18,12 +26,19 @@ class NearestNeighborRecommendation:
         return 
 
     def cal_item_sims(self):
+        """ Calculate item similarity using cosine similarity
+        :return: item silmilarity matrix
+        """
         item_sims = cosine_similarity(self.ratings_matrix.transpose(), self.ratings_matrix.transpose())
         item_sims_df = pd.DataFrame(data=item_sims, index=self.ratings_matrix.columns,
                           columns=self.ratings_matrix.columns)
         return item_sims_df
 
     def predict_top_sim_ratings(self, item_sims_df):
+        """ Predit nan ratings data by dot item-similarity matrix, raitings matrix
+        :param item_sims_df:
+        :return:
+        """
         first_filtering = 20
         predict = np.zeros(self.ratings_matrix.values.shape)
         for col in range(self.ratings_matrix.values.shape[1]):
@@ -46,7 +61,6 @@ class NearestNeighborRecommendation:
         seen_movies = user_rating[user_rating>0].index.tolist()
         movie_list = self.ratings_matrix.columns.tolist()
         unseen_movies = [movie for movie in movie_list if movie not in seen_movies]
-
         return unseen_movies
 
     def get_recommend_movie(self, userId):
@@ -60,7 +74,6 @@ class NearestNeighborRecommendation:
         item_sims_df = self.cal_item_sims()
         self.predict_top_sim_ratings(item_sims_df)
         recommend_res = self.get_recommend_movie(9)
-
         return recommend_res
 
 
