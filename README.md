@@ -5,4 +5,4 @@
   * tmdb_5000_movies Datasets (content-based)
 
 
-* Now, studying and developing [DeepFM](https://arxiv.org/abs/1703.04247) model.
+* Now, studying and developing [DeepFM: A Factorization-Machine based Neural Network for CTR Prediction](https://arxiv.org/abs/1703.04247) model.
