@@ -8,6 +8,10 @@ warnings.filterwarnings('ignore')
 
 class ContentBasedRecommendation:
     def __init__(self, movie_data, top_n):
+        """ The algorithm is based on item-based systems. It will return top n recommended items for input items.
+        :param movie_data: tmdb_5000_movies
+        :param top_n: Get n recommended items
+        """
         self.movie_data = movie_data
         self.top_n = top_n
 
@@ -19,6 +23,9 @@ class ContentBasedRecommendation:
         return
 
     def vectorize_genres(self):
+        """ Vectorize genres using CountVectorizer.
+        :return: genre similarity
+        """
         self.movie_data['genres_str'] = self.movie_data['genres'].apply(lambda x: ' '.join(x))
         genre_vectorizer = CountVectorizer()
         gerne_matrix = genre_vectorizer.fit_transform(self.movie_data['genres_str'])
@@ -27,6 +34,12 @@ class ContentBasedRecommendation:
         return sorted_genre_sim
 
     def get_sim_movies(self, sorted_idx, title):
+        """ Split recommendation system to two steps to improve accuracy. First, get top n*2 items using only
+        genre similarity. Second, rank top n*2 items by weighted_vote.
+        :param sorted_idx:
+        :param title:
+        :return: top n recommended items
+        """
         title_movie = self.movie_data[self.movie_data['title'] == title]
         title_idx = title_movie.index.values
         similar_indices = sorted_idx[title_idx, :(self.top_n*2)]
