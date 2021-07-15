@@ -1,7 +1,7 @@
 # Recommendation-System
-* Development content-based, kNN, matrix factorization recommendation systems.
+* Development content-based, item-based nearest-neighbor CF, matrix factorization recommendation systems.
 * Using Datasets
-  * Movie-Lens latest-small Datasets (kNN, matrix factorization)
+  * Movie-Lens latest-small Datasets (item-based nearest-neighbor CF, matrix factorization)
   * tmdb_5000_movies Datasets (content-based)
 
 
